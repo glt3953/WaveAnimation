@@ -23,8 +23,4 @@
     [self.view addSubview:waveView];
 }
 
-
-
-
-
 @end

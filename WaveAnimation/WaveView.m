@@ -11,7 +11,7 @@
 @interface WaveView()
 
 @property (nonatomic, strong) CADisplayLink *waveDisplaylink;
-@property (nonatomic, strong) CAShapeLayer *firstWaveLayer;
+@property (nonatomic, strong) CAShapeLayer *firstWaveLayer; //一个本身没有形状的图层，他的形状来源于你给定的Path，它依附于Path
 @property (nonatomic, strong) CAShapeLayer *secondWaveLayer;
 
 @end
@@ -27,7 +27,7 @@
     CGFloat waveSpeedA;//第一个波浪图层的水纹速度A
     CGFloat waveSpeedB;//第二个波浪图层的水纹速度B
     CGFloat waterWaveWidth; //水纹宽度
-}
+} //注：属性和基础变量都写在了自定义的WaveView的.m文件中，如果你想将它作为工具类，随时改变波纹的一些属性和变量，你可以将其暴露在头文件中，以便在需要引入它的地方方便修改。
 
 -(id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
@@ -84,63 +84,61 @@
     
     
     /*
-     *启动定时器
+     *启动定时器，适用于UI的不停刷新
      */
     _waveDisplaylink = [CADisplayLink displayLinkWithTarget:self selector:@selector(getCurrentWave:)];
-    _waveDisplaylink.frameInterval = 2;//设置定时器刷新的频率
+    _waveDisplaylink.frameInterval = 2;//设置定时器刷新的频率，屏幕刷新两帧定时器才会触发一次（iOS设备的默认刷新频率是60HZ也就是60帧，即每秒刷新60次）
     [_waveDisplaylink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];//添加到RunLoop中
 }
 
 #pragma mark 实现波纹动画
 -(void)getCurrentWave:(CADisplayLink *)displayLink
 {
-    //实时的位移
+    //实时的位移：waveSpeedA/waveW
     offsetXA += waveSpeedA;
     offsetXB += waveSpeedB;
     [self setCurrentWaveLayerPath];
 }
 
 //重新绘制波浪图层
--(void)setCurrentWaveLayerPath
-{
-    //创建一个路径
-    CGMutablePathRef path = CGPathCreateMutable();
+- (void)setCurrentWaveLayerPath {
+    //创建一个路径，绘图路径，带有Ref后缀的类型是Core Graphics中用来模拟面向对象机制的C结构，必须在使用完之后手动释放。
+    CGMutablePathRef pathA = CGPathCreateMutable();
     CGFloat y = currentK;
     //将点移动到 x=0,y=currentK的位置
-    CGPathMoveToPoint(path, nil, 0, y);
+    CGPathMoveToPoint(pathA, nil, 0, y);
     for (NSInteger x = 0.0f; x<=waterWaveWidth; x++) {
-        //正玄波浪公式
+        //正弦波浪公式：y =Asin（ωx+φ）+C
         y = waveA * sin(waveW * x+ offsetXA)+currentK;
         //将点连成线
-        CGPathAddLineToPoint(path, nil, x, y);
+        CGPathAddLineToPoint(pathA, nil, x, y);
     }
-    CGPathAddLineToPoint(path, nil, waterWaveWidth, self.frame.size.height);
-    CGPathAddLineToPoint(path, nil, 0, self.frame.size.height);
-    CGPathCloseSubpath(path);
-    _firstWaveLayer.path = path;
+    CGPathAddLineToPoint(pathA, nil, waterWaveWidth, self.frame.size.height);
+    CGPathAddLineToPoint(pathA, nil, 0, self.frame.size.height);
+    CGPathCloseSubpath(pathA);
+    _firstWaveLayer.path = pathA;
+    CGPathRelease(pathA);
     
     //创建一个路径
-    CGMutablePathRef path1 = CGPathCreateMutable();
-    
+    CGMutablePathRef pathB = CGPathCreateMutable();
     //将点移动到 x=offsetXB/waveW=30,y=currentK的位置
-    CGPathMoveToPoint(path1, nil, 0, y);
+    CGPathMoveToPoint(pathB, nil, 0, y);
     for (NSInteger x = 0.0f; x<=waterWaveWidth; x++) {
-        //正玄波浪公式
+        //正弦波浪公式
         y = waveB * sin(waveW * x+ offsetXB)+currentK;
         //将点连成线
-        CGPathAddLineToPoint(path1, nil, x, y);
+        CGPathAddLineToPoint(pathB, nil, x, y);
     }
-    CGPathAddLineToPoint(path1, nil, waterWaveWidth, self.frame.size.height);
-    CGPathAddLineToPoint(path1, nil, 0, self.frame.size.height);
-    CGPathCloseSubpath(path1);
-    _secondWaveLayer.path = path1;
+    CGPathAddLineToPoint(pathB, nil, waterWaveWidth, self.frame.size.height);
+    CGPathAddLineToPoint(pathB, nil, 0, self.frame.size.height);
+    CGPathCloseSubpath(pathB);
+    _secondWaveLayer.path = pathB;
     
-    CGPathRelease(path1);
+    CGPathRelease(pathB);
 }
 
 #pragma mark 销毁定时器
--(void)dealloc
-{
+- (void)dealloc {
     [_waveDisplaylink invalidate];
 }
 
