@@ -170,6 +170,53 @@
     CGPathCloseSubpath(pathC);
     _thirdWaveLayer.path = pathC;
     CGPathRelease(pathC);
+    
+    /*
+     *渐变
+     */
+    //保存渐变之前的绘画状态
+    CGContextRef currentContext = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(currentContext);
+    //绘制渐变剪切路径
+    UIBezierPath *path1 = [[UIBezierPath alloc] init];
+    [path1 moveToPoint:CGPointMake(100, 450)];
+    [path1 addLineToPoint:CGPointMake(250, 450)];
+    [path1 addLineToPoint:CGPointMake(250, 650)];
+    [path1 addLineToPoint:CGPointMake(100, 650)];
+    [path1 closePath];
+    //是用剪切路径剪裁图形上下文
+    [path1 addClip];
+    _thirdWaveLayer.accessibilityPath = path1;
+    //绘制渐变
+    CGFloat locations[4] = {0.0,0.4,0.7,1.0};//三个颜色节点
+    CGFloat components[16] = {1.0,0.3,0.0,1.0,//起始颜色
+        0.2,0.8,0.2,1.0,//中间颜色
+        1.0,1.0,0.5,1.0,//中间颜色
+        0.8,0.3,0.4,1.0};//终止颜色
+    //创建RGB色彩空间对象
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, components, locations, 4);
+    /*线性渐变
+     *参数1:当前上下文
+     *参数2:渐变指针
+     *参数3，4:渐变的起始和终止位置
+     *参数5:CGGradientDrawingOptions枚举
+     typedef CF_OPTIONS (uint32_t, CGGradientDrawingOptions) {
+     kCGGradientDrawsBeforeStartLocation = (1 << 0),//扩展整个渐变到渐变的起点之前的所有点
+     kCGGradientDrawsAfterEndLocation = (1 << 1)//扩展整个渐变到渐变的终点之后的所有点
+     };
+     0表示既不往前扩展也不往后扩展
+     */
+    //渐变的起点(渐变效果在以起点和终点为轴的直线周边)
+    CGPoint startPoint = CGPointMake(100, 450);
+    //渐变的终点
+    CGPoint endPoint = CGPointMake(100, 650);
+    CGContextDrawLinearGradient(currentContext, gradient, startPoint, endPoint, kCGGradientDrawsBeforeStartLocation|kCGGradientDrawsAfterEndLocation);
+    //释放创建的C结构对象
+    CGGradientRelease(gradient);
+    CGColorSpaceRelease(colorSpace);
+    //恢复绘画状态
+    CGContextRestoreGState(currentContext);
 }
 
 #pragma mark - 销毁定时器
