@@ -7,6 +7,7 @@
 //
 
 #import "WaveView.h"
+#import "UIColor+NingXia.h"
 
 @interface WaveView()
 
@@ -29,10 +30,10 @@
     CGFloat waterWaveWidth; //水纹宽度
 } //注：属性和基础变量都写在了自定义的WaveView的.m文件中，如果你想将它作为工具类，随时改变波纹的一些属性和变量，你可以将其暴露在头文件中，以便在需要引入它的地方方便修改。
 
--(id)initWithFrame:(CGRect)frame{
+- (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor colorWithRed:223/255.0 green:22/255.0 blue:64/255.0 alpha:1];
+        self.backgroundColor = [UIColor colorFromHexString:@"#1A1E33" alpha:0.75];
         self.layer.masksToBounds  = YES;
         [self setUp];
     }
@@ -40,9 +41,7 @@
     return self;
 }
 
-
--(void)setUp
-{
+- (void)setUp {
     //设置波浪的宽度
     waterWaveWidth = self.frame.size.width;
     //设置周期影响参数，2π/waveW是一个周期
@@ -55,7 +54,7 @@
      */
     _firstWaveLayer = [CAShapeLayer layer];
     //设置填充颜色
-    _firstWaveLayer.fillColor = [UIColor colorWithRed:52/255.0 green:98/255.0 blue:176/255.0 alpha:1.0].CGColor;
+    _firstWaveLayer.fillColor = [UIColor colorFromHexString:@"#4DE1FF" alpha:0.5].CGColor;
     //添加到view的layer上
     [self.layer addSublayer:_firstWaveLayer];
     //设置波纹流动速度
@@ -72,7 +71,7 @@
     //初始化
     _secondWaveLayer = [CAShapeLayer layer];
     //设置填充颜色
-    _secondWaveLayer.fillColor = [UIColor colorWithRed:32/255.0 green:78/255.0 blue:156/255.0 alpha:1.0].CGColor;
+    _secondWaveLayer.fillColor = [UIColor colorFromHexString:@"#4DA6FF" alpha:0.1].CGColor;
     //添加到view的layer上
     [self.layer addSublayer:_secondWaveLayer];
     //设置波纹流动速度
@@ -91,9 +90,8 @@
     [_waveDisplaylink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];//添加到RunLoop中
 }
 
-#pragma mark 实现波纹动画
--(void)getCurrentWave:(CADisplayLink *)displayLink
-{
+#pragma mark - 实现波纹动画
+- (void)getCurrentWave:(CADisplayLink *)displayLink {
     //实时的位移：waveSpeedA/waveW
     offsetXA += waveSpeedA;
     offsetXB += waveSpeedB;
@@ -137,7 +135,7 @@
     CGPathRelease(pathB);
 }
 
-#pragma mark 销毁定时器
+#pragma mark - 销毁定时器
 - (void)dealloc {
     [_waveDisplaylink invalidate];
 }
