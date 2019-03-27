@@ -122,8 +122,9 @@
     CGFloat gradientLayerY = currentK + 40;
     _thirdGradientLayer.frame = CGRectMake(0, gradientLayerY, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame) - gradientLayerY);
     // 默认的渐变色
-    NSArray *colors = @[(__bridge id)[UIColor colorFromHexString:@"#4DE1FF" alpha:0.5].CGColor, (__bridge id)[UIColor colorFromHexString:@"#4DA6FF" alpha:0.1].CGColor];
+    NSArray *colors = @[(__bridge id)[UIColor colorFromHexString:@"#4DE1FF" alpha:0.5].CGColor, (__bridge id)[UIColor colorFromHexString:@"#4DE1FF" alpha:0.2].CGColor, (__bridge id)[UIColor colorFromHexString:@"#4DA6FF" alpha:0.1].CGColor];
     _thirdGradientLayer.colors = colors;
+    _thirdGradientLayer.shadowColor = [UIColor colorFromHexString:@"#4DE1FF" alpha:0.2].CGColor;
     //设定颜色分割点
     NSInteger count = [colors count];
     CGFloat d = 1.0 / count;

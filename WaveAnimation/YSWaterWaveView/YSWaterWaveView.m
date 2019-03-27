@@ -104,6 +104,7 @@ static const CGFloat kExtraHeight = 20;     // 保证水波波峰不被裁剪，
         self.waveLayer = nil;
     }
     self.waveLayer = [CAShapeLayer layer];
+    self.waveLayer.fillColor = [UIColor colorFromHexString:@"#4DA6FF" alpha:0.6].CGColor;
     self.waveLayer.shadowColor = [UIColor colorFromHexString:@"#4DE1FF" alpha:0.2].CGColor;
     
     // 设置渐变
@@ -166,7 +167,7 @@ static const CGFloat kExtraHeight = 20;     // 保证水波波峰不被裁剪，
 
 - (NSArray *)defaultColors {
     // 默认的渐变色
-    NSArray *colors = @[(__bridge id)[UIColor colorFromHexString:@"#4DE1FF" alpha:0.5].CGColor, (__bridge id)[UIColor colorFromHexString:@"#4DE1FF" alpha:0.2].CGColor, (__bridge id)[UIColor colorFromHexString:@"#4DA6FF" alpha:0.1].CGColor];;
+    NSArray *colors = @[(__bridge id)[UIColor colorFromHexString:@"#4DE1FF" alpha:0.5].CGColor, (__bridge id)[UIColor colorFromHexString:@"#4DE1FF" alpha:0.2].CGColor, (__bridge id)[UIColor colorFromHexString:@"#4DA6FF" alpha:0.1].CGColor];
     return colors;
 }
 
