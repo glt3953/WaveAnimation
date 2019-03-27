@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0A4D7FC42249D5F600EFD886 /* UIImage+NingXia.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A4D7FC12249D5F600EFD886 /* UIImage+NingXia.m */; };
 		0A4D7FC52249D5F600EFD886 /* UIColor+NingXia.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A4D7FC22249D5F600EFD886 /* UIColor+NingXia.m */; };
+		0A4D7FC9224B243300EFD886 /* YSWaterWaveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A4D7FC7224B243300EFD886 /* YSWaterWaveView.m */; };
 		DAD003EE1E8F8BA9008CF549 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD003ED1E8F8BA9008CF549 /* main.m */; };
 		DAD003F11E8F8BA9008CF549 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD003F01E8F8BA9008CF549 /* AppDelegate.m */; };
 		DAD003F41E8F8BA9008CF549 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD003F31E8F8BA9008CF549 /* ViewController.m */; };
@@ -43,6 +44,8 @@
 		0A4D7FC12249D5F600EFD886 /* UIImage+NingXia.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+NingXia.m"; sourceTree = "<group>"; };
 		0A4D7FC22249D5F600EFD886 /* UIColor+NingXia.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NingXia.m"; sourceTree = "<group>"; };
 		0A4D7FC32249D5F600EFD886 /* UIImage+NingXia.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+NingXia.h"; sourceTree = "<group>"; };
+		0A4D7FC7224B243300EFD886 /* YSWaterWaveView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YSWaterWaveView.m; sourceTree = "<group>"; };
+		0A4D7FC8224B243300EFD886 /* YSWaterWaveView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YSWaterWaveView.h; sourceTree = "<group>"; };
 		DAD003E91E8F8BA9008CF549 /* WaveAnimation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WaveAnimation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAD003ED1E8F8BA9008CF549 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		DAD003EF1E8F8BA9008CF549 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -100,6 +103,15 @@
 			path = CategoryUI;
 			sourceTree = "<group>";
 		};
+		0A4D7FC6224B243300EFD886 /* YSWaterWaveView */ = {
+			isa = PBXGroup;
+			children = (
+				0A4D7FC8224B243300EFD886 /* YSWaterWaveView.h */,
+				0A4D7FC7224B243300EFD886 /* YSWaterWaveView.m */,
+			);
+			path = YSWaterWaveView;
+			sourceTree = "<group>";
+		};
 		DAD003E01E8F8BA9008CF549 = {
 			isa = PBXGroup;
 			children = (
@@ -123,6 +135,7 @@
 		DAD003EB1E8F8BA9008CF549 /* WaveAnimation */ = {
 			isa = PBXGroup;
 			children = (
+				0A4D7FC6224B243300EFD886 /* YSWaterWaveView */,
 				0A4D7FBF2249D5F600EFD886 /* CategoryUI */,
 				DAD003EF1E8F8BA9008CF549 /* AppDelegate.h */,
 				DAD003F01E8F8BA9008CF549 /* AppDelegate.m */,
@@ -305,6 +318,7 @@
 			files = (
 				DAD003F41E8F8BA9008CF549 /* ViewController.m in Sources */,
 				0A4D7FC42249D5F600EFD886 /* UIImage+NingXia.m in Sources */,
+				0A4D7FC9224B243300EFD886 /* YSWaterWaveView.m in Sources */,
 				DAD003F11E8F8BA9008CF549 /* AppDelegate.m in Sources */,
 				DAD003EE1E8F8BA9008CF549 /* main.m in Sources */,
 				0A4D7FC52249D5F600EFD886 /* UIColor+NingXia.m in Sources */,
