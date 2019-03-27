@@ -69,7 +69,9 @@ static const CGFloat kExtraHeight = 20;     // 保证水波波峰不被裁剪，
 
 - (void)defaultConfig {
     // 默认设置一些属性
-    self.waveCycle = 1.66 * M_PI / CGRectGetWidth(self.frame);     // 影响波长
+//    self.waveCycle = 1.66 * M_PI / CGRectGetWidth(self.frame);     // 影响波长
+    //设置周期影响参数，2π/waveCycle是一个周期
+    self.waveCycle = 1/30.0;
     self.currentWavePointY = CGRectGetHeight(self.frame) * self.percent;       // 波纹从下往上升起
     self.waveSpeedA = 0.2;
     self.waveSpeedB = 0.1;
@@ -99,10 +101,8 @@ static const CGFloat kExtraHeight = 20;     // 保证水波波峰不被裁剪，
         self.firstGradientLayer = nil;
     }
     self.firstGradientLayer = [CAGradientLayer layer];
-    
-    self.firstGradientLayer.frame = [self firstGradientLayerFrame];
+    self.firstGradientLayer.frame = [self gradientLayerFrame];
     [self setupGradientColor];
-    
     [self.firstGradientLayer setMask:self.firstWaveLayer];
     [self.layer addSublayer:self.firstGradientLayer];
 }
@@ -122,26 +122,20 @@ static const CGFloat kExtraHeight = 20;     // 保证水波波峰不被裁剪，
         self.secondGradientLayer = nil;
     }
     self.secondGradientLayer = [CAGradientLayer layer];
-    
-    self.secondGradientLayer.frame = [self firstGradientLayerFrame];
+    self.secondGradientLayer.frame = [self gradientLayerFrame];
     [self setupGradientColor];
-    
     [self.secondGradientLayer setMask:self.secondWaveLayer];
     [self.layer addSublayer:self.secondGradientLayer];
 }
 
 - (void)setupGradientColor {
-    // firstGradientLayer设置渐变色
-    if ([self.colors count] < 1) {
-        self.colors = [self defaultColors];
-    }
-    
-    self.firstGradientLayer.colors = self.colors;
-    self.secondGradientLayer.colors = self.colors;
-//    self.firstGradientLayer.shadowColor = [self colorFromHexString:@"#4DE1FF" alpha:0.2].CGColor;
+    NSArray *colorsA = @[(__bridge id)[self colorFromHexString:@"#4DE1FF" alpha:0.5].CGColor, (__bridge id)[self colorFromHexString:@"#4DC3FF" alpha:0.3].CGColor, (__bridge id)[self colorFromHexString:@"#4DA6FF" alpha:0.1].CGColor];
+    NSArray *colorsB = @[(__bridge id)[self colorFromHexString:@"#4DA6FF" alpha:0.5].CGColor, (__bridge id)[self colorFromHexString:@"#4DC3FF" alpha:0.3].CGColor, (__bridge id)[self colorFromHexString:@"#4DE1FF" alpha:0.1].CGColor];
+    self.firstGradientLayer.colors = colorsA;
+    self.secondGradientLayer.colors = colorsB;
     
     //设定颜色分割点
-    NSInteger count = [self.colors count];
+    NSInteger count = [colorsA count];
     CGFloat d = 1.0 / count;
     
     NSMutableArray *locations = [NSMutableArray array];
@@ -163,24 +157,18 @@ static const CGFloat kExtraHeight = 20;     // 保证水波波峰不被裁剪，
     self.secondGradientLayer.endPoint = CGPointMake(0, 1);
 }
 
-- (CGRect)firstGradientLayerFrame {
+- (CGRect)gradientLayerFrame {
     // firstGradientLayer在上升完成之后的frame值，如果firstGradientLayer在上升过程中不断变化frame值会导致一开始绘制卡顿，所以只进行一次赋值
     
-    CGFloat firstGradientLayerHeight = CGRectGetHeight(self.frame) * self.percent + kExtraHeight;
+    CGFloat gradientLayerHeight = CGRectGetHeight(self.frame) * self.percent + kExtraHeight;
     
-    if (firstGradientLayerHeight > CGRectGetHeight(self.frame)) {
-        firstGradientLayerHeight = CGRectGetHeight(self.frame);
+    if (gradientLayerHeight > CGRectGetHeight(self.frame)) {
+        gradientLayerHeight = CGRectGetHeight(self.frame);
     }
     
-    CGRect frame = CGRectMake(0, CGRectGetHeight(self.frame) - firstGradientLayerHeight, CGRectGetWidth(self.frame), firstGradientLayerHeight);
+    CGRect frame = CGRectMake(0, CGRectGetHeight(self.frame) - gradientLayerHeight, CGRectGetWidth(self.frame), gradientLayerHeight);
     
     return frame;
-}
-
-- (NSArray *)defaultColors {
-    // 默认的渐变色
-    NSArray *colors = @[(__bridge id)[self colorFromHexString:@"#4DE1FF" alpha:0.5].CGColor, (__bridge id)[self colorFromHexString:@"#4DE1FF" alpha:0.2].CGColor, (__bridge id)[self colorFromHexString:@"#4DA6FF" alpha:0.1].CGColor];
-    return colors;
 }
 
 - (void)startWaveToPercent:(CGFloat)percent {
@@ -238,7 +226,7 @@ static const CGFloat kExtraHeight = 20;     // 保证水波波峰不被裁剪，
     CGFloat width = CGRectGetWidth(self.frame);
     for (float x = 0.0f; x <= width; x++) {
         // 正弦波浪公式
-        y = self.waveAmplitudeA * sin(self.waveCycle * x + self.offsetXA);
+        y = self.waveAmplitudeB * sin(self.waveCycle * x + self.offsetXB) + self.currentWavePointY  / 3;
         CGPathAddLineToPoint(pathB, nil, x, y);
     }
     

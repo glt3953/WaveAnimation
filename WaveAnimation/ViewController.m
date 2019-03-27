@@ -31,7 +31,7 @@
     waterWaveView.layer.cornerRadius = 8;
     waterWaveView.clipsToBounds = YES;
     [self.view addSubview:waterWaveView];
-    [waterWaveView startWaveToPercent:0.3];
+    [waterWaveView startWaveToPercent:0.5];
 //    [waterWaveView setGrowthSpeed:0.1];
 }
 
