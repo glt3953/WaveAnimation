@@ -7,7 +7,6 @@
 //
 
 #import "YSWaterWaveView.h"
-#import "UIColor+NingXia.h"
 
 @interface YSWaterWaveView ()
 
@@ -35,10 +34,19 @@ static const CGFloat kExtraHeight = 20;     // 保证水波波峰不被裁剪，
     if (self) {
         [self defaultConfig];
         
-        self.backgroundColor = [UIColor colorFromHexString:@"#1A1E33" alpha:0.75];
+        self.backgroundColor = [self colorFromHexString:@"#1A1E33" alpha:0.75];
     }
     
     return self;
+}
+
+- (UIColor *)colorFromHexString:(NSString *)hexString alpha:(float)alpha {
+    unsigned rgbValue = 0;
+    NSScanner *scanner = [NSScanner scannerWithString:hexString];
+    [scanner setScanLocation:1]; // bypass '#' character
+    [scanner scanHexInt:&rgbValue];
+    
+    return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:alpha];
 }
 
 - (void)setGrowthSpeed:(CGFloat)growthSpeed {
@@ -81,8 +89,8 @@ static const CGFloat kExtraHeight = 20;     // 保证水波波峰不被裁剪，
         self.firstWaveLayer = nil;
     }
     self.firstWaveLayer = [CAShapeLayer layer];
-    self.firstWaveLayer.fillColor = [UIColor colorFromHexString:@"#4DA6FF" alpha:0.6].CGColor;
-    self.firstWaveLayer.shadowColor = [UIColor colorFromHexString:@"#4DE1FF" alpha:0.2].CGColor;
+    self.firstWaveLayer.fillColor = [self colorFromHexString:@"#4DA6FF" alpha:0.6].CGColor;
+    self.firstWaveLayer.shadowColor = [self colorFromHexString:@"#4DE1FF" alpha:0.2].CGColor;
     
     // 设置渐变
     if (self.firstGradientLayer) {
@@ -105,7 +113,7 @@ static const CGFloat kExtraHeight = 20;     // 保证水波波峰不被裁剪，
     }
     
     self.firstGradientLayer.colors = self.colors;
-    self.firstGradientLayer.shadowColor = [UIColor colorFromHexString:@"#4DE1FF" alpha:0.2].CGColor;
+    self.firstGradientLayer.shadowColor = [self colorFromHexString:@"#4DE1FF" alpha:0.2].CGColor;
     
     //设定颜色分割点
     NSInteger count = [self.colors count];
@@ -142,7 +150,7 @@ static const CGFloat kExtraHeight = 20;     // 保证水波波峰不被裁剪，
 
 - (NSArray *)defaultColors {
     // 默认的渐变色
-    NSArray *colors = @[(__bridge id)[UIColor colorFromHexString:@"#4DE1FF" alpha:0.5].CGColor, (__bridge id)[UIColor colorFromHexString:@"#4DE1FF" alpha:0.2].CGColor, (__bridge id)[UIColor colorFromHexString:@"#4DA6FF" alpha:0.1].CGColor];
+    NSArray *colors = @[(__bridge id)[self colorFromHexString:@"#4DE1FF" alpha:0.5].CGColor, (__bridge id)[self colorFromHexString:@"#4DE1FF" alpha:0.2].CGColor, (__bridge id)[self colorFromHexString:@"#4DA6FF" alpha:0.1].CGColor];
     return colors;
 }
 
