@@ -12,6 +12,10 @@
 
 @interface ViewController ()
 
+@property (nonatomic, strong) CADisplayLink *displayLink;
+@property (nonatomic, strong) YSWaterWaveView *waterWaveView;
+@property (nonatomic, strong) NSTimer *timerForRefresh;
+
 @end
 
 @implementation ViewController
@@ -27,12 +31,30 @@
     
     CGRect frame = waveView.frame;
     frame.origin.y += frame.size.height + 50;
-    YSWaterWaveView *waterWaveView = [[YSWaterWaveView alloc] initWithFrame:frame];
-    waterWaveView.layer.cornerRadius = 8;
-    waterWaveView.clipsToBounds = YES;
-    [self.view addSubview:waterWaveView];
-    [waterWaveView startWaveToPercent:0.5];
-//    [waterWaveView setGrowthSpeed:0.1];
+    _waterWaveView = [[YSWaterWaveView alloc] initWithFrame:frame];
+    _waterWaveView.layer.cornerRadius = 8;
+    _waterWaveView.clipsToBounds = YES;
+    [self.view addSubview:_waterWaveView];
+    [_waterWaveView startWaveToPercent:0.5];
+    
+//    // 启动同步渲染绘制波纹
+//    self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(refreshWave:)];
+//    [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+    
+    self.timerForRefresh = [NSTimer timerWithTimeInterval:0.3
+                                                     target:self
+                                                   selector:@selector(refreshWaveTimer:)
+                                                   userInfo:nil repeats:YES];
+    [[NSRunLoop mainRunLoop] addTimer:self.timerForRefresh forMode:NSRunLoopCommonModes];
+}
+
+- (void)refreshWaveTimer:(NSTimer *)timer {
+    [_waterWaveView startWaveToPercent:rand() / (double)(RAND_MAX / 1)];
+}
+
+- (void)refreshWave:(CADisplayLink *)displayLink {
+//    float a = rand() / (double)(RAND_MAX / 1);
+    [_waterWaveView startWaveToPercent:rand() / (double)(RAND_MAX / 1)];
 }
 
 @end
