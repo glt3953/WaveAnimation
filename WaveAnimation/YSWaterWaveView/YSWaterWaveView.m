@@ -54,8 +54,7 @@ static const CGFloat kExtraHeight = 20;     // 保证水波波峰不被裁剪，
     return self;
 }
 
-- (void)setGrowthSpeed:(CGFloat)growthSpeed
-{
+- (void)setGrowthSpeed:(CGFloat)growthSpeed {
     self.waveGrowth = growthSpeed;
 }
 
@@ -71,25 +70,23 @@ static const CGFloat kExtraHeight = 20;     // 保证水波波峰不被裁剪，
     self.colors = array;
 }
 
-- (void)setColorsWithArray:(NSArray *)colors
-{
+- (void)setColorsWithArray:(NSArray *)colors {
     self.colors = colors;
 }
 
-- (void)defaultConfig
-{
+- (void)defaultConfig {
     // 默认设置一些属性
     self.waveCycle = 1.66 * M_PI / CGRectGetWidth(self.frame);     // 影响波长
     self.currentWavePointY = CGRectGetHeight(self.frame) * self.percent;       // 波纹从下往上升起
     
-    self.waveGrowth = 1.0;
-    self.waveSpeed = 0.4 / M_PI;
+//    self.waveGrowth = 1.0;
+//    self.waveSpeed = 0.4 / M_PI;
+    self.waveSpeed = 0.1;
     
     self.offsetX = 0;
 }
 
-- (void)resetProperty
-{
+- (void)resetProperty {
     // 重置属性
     self.currentWavePointY = CGRectGetHeight(self.frame) * self.percent;
     self.offsetX = 0;
@@ -124,11 +121,9 @@ static const CGFloat kExtraHeight = 20;     // 保证水波波峰不被裁剪，
     [self.layer addSublayer:self.gradientLayer];
 }
 
-- (void)setupGradientColor
-{
+- (void)setupGradientColor {
     // gradientLayer设置渐变色
-    if ([self.colors count] < 1)
-    {
+    if ([self.colors count] < 1) {
         self.colors = [self defaultColors];
     }
     
@@ -140,8 +135,7 @@ static const CGFloat kExtraHeight = 20;     // 保证水波波峰不被裁剪，
     CGFloat d = 1.0 / count;
     
     NSMutableArray *locations = [NSMutableArray array];
-    for (NSInteger i = 0; i < count; i++)
-    {
+    for (NSInteger i = 0; i < count; i++) {
         NSNumber *num = @(d + d * i);
         [locations addObject:num];
     }
@@ -161,8 +155,7 @@ static const CGFloat kExtraHeight = 20;     // 保证水波波峰不被裁剪，
     
     CGFloat gradientLayerHeight = CGRectGetHeight(self.frame) * self.percent + kExtraHeight;
     
-    if (gradientLayerHeight > CGRectGetHeight(self.frame))
-    {
+    if (gradientLayerHeight > CGRectGetHeight(self.frame)) {
         gradientLayerHeight = CGRectGetHeight(self.frame);
     }
     
@@ -171,22 +164,19 @@ static const CGFloat kExtraHeight = 20;     // 保证水波波峰不被裁剪，
     return frame;
 }
 
-- (NSArray *)defaultColors
-{
+- (NSArray *)defaultColors {
     // 默认的渐变色
-    NSArray *colors = @[(__bridge id)[UIColor colorFromHexString:@"#4DE1FF" alpha:0.5].CGColor, (__bridge id)[UIColor colorFromHexString:@"#4DA6FF" alpha:0.1].CGColor];;
+    NSArray *colors = @[(__bridge id)[UIColor colorFromHexString:@"#4DE1FF" alpha:0.5].CGColor, (__bridge id)[UIColor colorFromHexString:@"#4DE1FF" alpha:0.2].CGColor, (__bridge id)[UIColor colorFromHexString:@"#4DA6FF" alpha:0.1].CGColor];;
     return colors;
 }
 
-- (void)startWaveToPercent:(CGFloat)percent
-{
+- (void)startWaveToPercent:(CGFloat)percent {
     self.percent = percent;
     
     [self resetProperty];
     [self resetLayer];
     
-    if (self.displayLink)
-    {
+    if (self.displayLink) {
         [self.displayLink invalidate];
         self.displayLink = nil;
     }
@@ -198,22 +188,18 @@ static const CGFloat kExtraHeight = 20;     // 保证水波波峰不被裁剪，
     [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
 }
 
-- (void)stopWave
-{
+- (void)stopWave {
     [self.displayLink invalidate];
     self.displayLink = nil;
 }
 
-- (void)setCurrentWave:(CADisplayLink *)displayLink
-{
-//    if ([self waveFinished]) {
-    if (0) {
+- (void)setCurrentWave:(CADisplayLink *)displayLink {
+    if ([self waveFinished]) {
         self.bWaveFinished = YES;
         [self amplitudeReduce];
         
         // 减小到0之后动画停止。
-        if (self.waveAmplitude <= 0)
-        {
+        if (self.waveAmplitude <= 0) {
             [self stopWave];
             return;
         }
@@ -227,8 +213,7 @@ static const CGFloat kExtraHeight = 20;     // 保证水波波峰不被裁剪，
     [self setCurrentWaveLayerPath];
 }
 
-- (BOOL)waveFinished
-{
+- (BOOL)waveFinished {
     // 波浪上升动画是否完成
     CGFloat d = CGRectGetHeight(self.frame) - CGRectGetHeight(self.gradientLayer.frame);
     CGFloat extraH = MIN(d, kExtraHeight);
@@ -237,18 +222,16 @@ static const CGFloat kExtraHeight = 20;     // 保证水波波峰不被裁剪，
     return bFinished;
 }
 
-- (void)setCurrentWaveLayerPath
-{
+- (void)setCurrentWaveLayerPath {
     // 通过正弦曲线来绘制波浪形状
     CGMutablePathRef path = CGPathCreateMutable();
     CGFloat y = self.currentWavePointY;
     
     CGPathMoveToPoint(path, nil, 0, y);
     CGFloat width = CGRectGetWidth(self.frame);
-    for (float x = 0.0f; x <= width; x++)
-    {
+    for (float x = 0.0f; x <= width; x++) {
         // 正弦波浪公式
-        y = self.waveAmplitude * sin(self.waveCycle * x + self.offsetX) + self.currentWavePointY;
+        y = self.waveAmplitude * sin(self.waveCycle * x + self.offsetX) + self.currentWavePointY / 2;
         CGPathAddLineToPoint(path, nil, x, y);
     }
     
@@ -260,37 +243,31 @@ static const CGFloat kExtraHeight = 20;     // 保证水波波峰不被裁剪，
     CGPathRelease(path);
 }
 
-- (void)amplitudeChanged
-{
+- (void)amplitudeChanged {
     // 波峰在一定范围之内进行轻微波动
     
     // 波峰该继续增大或减小
-    if (self.increase)
-    {
+    if (self.increase) {
         self.variable += 0.01;
-    }
-    else
-    {
+    } else {
         self.variable -= 0.01;
     }
     
     // 变化的范围
-    if (self.variable <= 1)
-    {
+    if (self.variable <= 1) {
         self.increase = YES;
     }
     
-    if (self.variable >= 1.6)
-    {
+    if (self.variable >= 1.6) {
         self.increase = NO;
     }
     
     // 根据variable值来决定波峰
-    self.waveAmplitude = self.variable * 5;
+//    self.waveAmplitude = self.variable * 5;
+    self.waveAmplitude = 15;
 }
 
-- (void)amplitudeReduce
-{
+- (void)amplitudeReduce {
     // 波浪上升完成后，波峰开始逐渐降低
     self.waveAmplitude -= 0.066;
 }

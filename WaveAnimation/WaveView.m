@@ -214,14 +214,18 @@
 //    CGContextSaveGState(currentContext);
 //    //绘制渐变剪切路径
 //    UIBezierPath *path1 = [[UIBezierPath alloc] init];
-//    [path1 moveToPoint:CGPointMake(100, 450)];
-//    [path1 addLineToPoint:CGPointMake(250, 450)];
-//    [path1 addLineToPoint:CGPointMake(250, 650)];
-//    [path1 addLineToPoint:CGPointMake(100, 650)];
+////    [path1 moveToPoint:CGPointMake(100, 450)];
+////    [path1 addLineToPoint:CGPointMake(250, 450)];
+////    [path1 addLineToPoint:CGPointMake(250, 650)];
+////    [path1 addLineToPoint:CGPointMake(100, 650)];
+//    [path1 moveToPoint:CGPointMake(0, 0)];
+//    [path1 addLineToPoint:CGPointMake(waterWaveWidth, 0)];
+//    [path1 addLineToPoint:CGPointMake(waterWaveWidth, y)];
+//    [path1 addLineToPoint:CGPointMake(0, y)];
 //    [path1 closePath];
 //    //是用剪切路径剪裁图形上下文
 //    [path1 addClip];
-//    _thirdWaveLayer.accessibilityPath = path1;
+////    _thirdWaveLayer.accessibilityPath = path1;
 //    //绘制渐变
 //    CGFloat locations[4] = {0.0,0.4,0.7,1.0};//三个颜色节点
 //    CGFloat components[16] = {1.0,0.3,0.0,1.0,//起始颜色
@@ -243,9 +247,9 @@
 //     0表示既不往前扩展也不往后扩展
 //     */
 //    //渐变的起点(渐变效果在以起点和终点为轴的直线周边)
-//    CGPoint startPoint = CGPointMake(100, 450);
+//    CGPoint startPoint = CGPointMake(0, 0);
 //    //渐变的终点
-//    CGPoint endPoint = CGPointMake(100, 650);
+//    CGPoint endPoint = CGPointMake(0, y);
 //    CGContextDrawLinearGradient(currentContext, gradient, startPoint, endPoint, kCGGradientDrawsBeforeStartLocation|kCGGradientDrawsAfterEndLocation);
 //    //释放创建的C结构对象
 //    CGGradientRelease(gradient);
