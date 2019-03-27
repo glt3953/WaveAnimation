@@ -11,8 +11,6 @@
 @interface YSWaterWaveView : UIView
 
 - (void)startWaveToPercent:(CGFloat)percent;
-
-- (void)setGrowthSpeed:(CGFloat)growthSpeed;    // 设置上升速度
 - (void)setGradientColors:(NSArray *)colors;    // 设置渐变色
 
 @end
