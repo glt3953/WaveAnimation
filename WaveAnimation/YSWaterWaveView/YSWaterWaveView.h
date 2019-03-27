@@ -12,5 +12,6 @@
 
 - (void)startWaveToPercent:(CGFloat)percent;
 - (void)setGradientColors:(NSArray *)colors;    // 设置渐变色
+- (void)refreshWaveAmplitude:(CGFloat)amplitude;
 
 @end

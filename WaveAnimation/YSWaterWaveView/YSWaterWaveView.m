@@ -81,6 +81,11 @@ static const CGFloat kExtraHeight = 20;     // 保证水波波峰不被裁剪，
     self.offsetXB = 1;
 }
 
+- (void)refreshWaveAmplitude:(CGFloat)amplitude {
+    self.waveAmplitudeA = amplitude;
+    self.waveAmplitudeB = amplitude;
+}
+
 - (void)resetProperty {
     // 重置属性
     self.currentWavePointY = CGRectGetHeight(self.frame) * self.percent;
@@ -205,7 +210,7 @@ static const CGFloat kExtraHeight = 20;     // 保证水波波峰不被裁剪，
     CGFloat width = CGRectGetWidth(self.frame);
     for (float x = 0.0f; x <= width; x++) {
         // 正弦波浪公式
-        y = self.waveAmplitudeA * sin(self.waveCycle * x + self.offsetXA) + self.currentWavePointY  / 2;
+        y = self.waveAmplitudeA * sin(self.waveCycle * x + self.offsetXA) + self.currentWavePointY   * 2 / 3;
         CGPathAddLineToPoint(pathA, nil, x, y);
     }
     
